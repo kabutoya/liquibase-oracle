@@ -23,6 +23,20 @@
         <xsd:attribute name="condition" type="xsd:string" use="required"/>
     </xsd:attributeGroup>
 
+    <!--    DB-Link Attribute by Kabutoya  -->
+
+    <xsd:attributeGroup name="dblinkAttributeCore">
+        <xsd:attribute name="dblinkName" type="xsd:string" use="required"/>
+    </xsd:attributeGroup>
+    <xsd:attributeGroup name="dblinkAttribute">
+        <xsd:attribute name="user" type="xsd:string" use="required"/>
+        <xsd:attribute name="password" type="xsd:string" use="required"/>
+        <xsd:attribute name="type" type="xsd:string"/>
+        <xsd:attribute name="authUser" type="xsd:string"/>
+        <xsd:attribute name="authPassword" type="xsd:string"/>
+        <xsd:attribute name="using" type="xsd:string"/>
+    </xsd:attributeGroup>
+
     <!--    table Attribute(the same) by Tomek -->
 
     <xsd:attributeGroup name="tableAttribute">
@@ -30,6 +44,29 @@
         <xsd:attribute name="tableName" type="xsd:string" use="required"/>
         <xsd:attribute name="tablespace" type="xsd:string"/>
     </xsd:attributeGroup>
+
+    <!--    CreateDBLink by kabutoya -->
+    <xsd:element name="createDBLink">
+        <xsd:complexType>
+            <xsd:attributeGroup ref="dblinkAttributeCore"/>
+            <xsd:attributeGroup ref="dblinkAttribute"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!--    AlterDBLink by kabutoya -->
+    <xsd:element name="alterDBLink">
+        <xsd:complexType>
+            <xsd:attributeGroup ref="dblinkAttributeCore"/>
+            <xsd:attributeGroup ref="dblinkAttribute"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!--    DropDBLink by kabutoya -->
+    <xsd:element name="dropDBLink">
+        <xsd:complexType>
+            <xsd:attributeGroup ref="dblinkAttributeCore"/>
+        </xsd:complexType>
+    </xsd:element>
 
     <!--    AddCheck Constraint by Tomek -->
 
