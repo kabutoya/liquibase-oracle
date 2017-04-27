@@ -3,7 +3,6 @@ package liquibase.ext.ora.alterdblink;
 import liquibase.database.Database;
 import liquibase.database.core.OracleDatabase;
 import liquibase.exception.ValidationErrors;
-import liquibase.ext.ora.dblink.DbLinkState;
 import liquibase.ext.ora.testing.BaseTestCase;
 import liquibase.sql.Sql;
 import liquibase.statement.SqlStatement;
@@ -14,9 +13,6 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by 01008716 on 2017/04/26.
- */
 public class AlterDBLinkGeneratorTest extends BaseTestCase {
     private AlterDBLinkChange change;
     private Database database = new OracleDatabase();
@@ -37,7 +33,7 @@ public class AlterDBLinkGeneratorTest extends BaseTestCase {
     @Test
     public void checkLocalDBLinkSQL() {
         SqlStatement[] statements = change.generateStatements(database);
-        DbLinkState statement = (DbLinkState)statements[0];
+        AlterDBLinkStatement statement = (AlterDBLinkStatement)statements[0];
         AlterDBLinkGenerator generator = new AlterDBLinkGenerator();
         Sql[] sqls = generator.generateSql(statement, database, null);
 
@@ -50,7 +46,7 @@ public class AlterDBLinkGeneratorTest extends BaseTestCase {
         change.setPassword(null);
         change.setUsing(null);  //USING allow NULL
         SqlStatement[] statements = change.generateStatements(database);
-        DbLinkState statement = (DbLinkState)statements[0];
+        AlterDBLinkStatement statement = (AlterDBLinkStatement)statements[0];
         AlterDBLinkGenerator generator = new AlterDBLinkGenerator();
 
         ValidationErrors errs = generator.validate(statement, database, null);
@@ -61,7 +57,7 @@ public class AlterDBLinkGeneratorTest extends BaseTestCase {
     public void checkPublicDBLinkSQL() {
         change.setType("PUBLIC");
         SqlStatement[] statements = change.generateStatements(database);
-        DbLinkState statement = (DbLinkState)statements[0];
+        AlterDBLinkStatement statement = (AlterDBLinkStatement)statements[0];
         AlterDBLinkGenerator generator = new AlterDBLinkGenerator();
         Sql[] sqls = generator.generateSql(statement, database, null);
 
@@ -75,7 +71,7 @@ public class AlterDBLinkGeneratorTest extends BaseTestCase {
         change.setAuthUser("AUSER1");
         change.setAuthPassword("APWD1");
         SqlStatement[] statements = change.generateStatements(database);
-        DbLinkState statement = (DbLinkState)statements[0];
+        AlterDBLinkStatement statement = (AlterDBLinkStatement)statements[0];
         AlterDBLinkGenerator generator = new AlterDBLinkGenerator();
         Sql[] sqls = generator.generateSql(statement, database, null);
 
@@ -87,9 +83,8 @@ public class AlterDBLinkGeneratorTest extends BaseTestCase {
         change.setAuthUser(null);
         change.setAuthPassword(null);
         SqlStatement[] statements = change.generateStatements(database);
-        DbLinkState statement = (DbLinkState)statements[0];
+        AlterDBLinkStatement statement = (AlterDBLinkStatement)statements[0];
         AlterDBLinkGenerator generator = new AlterDBLinkGenerator();
-        Sql[] sqls = generator.generateSql(statement, database, null);
 
         ValidationErrors errs = generator.validate(statement, database, null);
         List<String> msgs = errs.getRequiredErrorMessages();
@@ -99,9 +94,8 @@ public class AlterDBLinkGeneratorTest extends BaseTestCase {
     public void checkSharedDBLinkSQLNonSupportedTypeERR() {
         change.setType("HOGE");
         SqlStatement[] statements = change.generateStatements(database);
-        DbLinkState statement = (DbLinkState)statements[0];
+        AlterDBLinkStatement statement = (AlterDBLinkStatement)statements[0];
         AlterDBLinkGenerator generator = new AlterDBLinkGenerator();
-        Sql[] sqls = generator.generateSql(statement, database, null);
 
         ValidationErrors errs = generator.validate(statement, database, null);
         List<String> msgs = errs.getErrorMessages();

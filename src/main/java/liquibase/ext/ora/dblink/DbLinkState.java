@@ -3,8 +3,8 @@ package liquibase.ext.ora.dblink;
 import liquibase.statement.AbstractSqlStatement;
 
 public class DbLinkState extends AbstractSqlStatement {
-    public static final String TYPE_SHARED = "SHARED";
-    public static final String TYPE_PUBLIC = "PUBLIC";
+    static final String TYPE_SHARED = "SHARED";
+    static final String TYPE_PUBLIC = "PUBLIC";
 
     private String type;     // SHARED, PUBLIC
     private String dblinkName;

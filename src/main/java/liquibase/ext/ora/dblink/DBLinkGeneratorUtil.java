@@ -1,29 +1,14 @@
 package liquibase.ext.ora.dblink;
 
-import liquibase.database.Database;
-import liquibase.database.core.OracleDatabase;
 import liquibase.exception.ValidationErrors;
-import liquibase.sql.Sql;
-import liquibase.sql.UnparsedSql;
-import liquibase.sqlgenerator.SqlGeneratorChain;
-import liquibase.sqlgenerator.core.AbstractSqlGenerator;
 
-public abstract class DBLinkGenerator extends AbstractSqlGenerator<DbLinkState> {
+public class DBLinkGeneratorUtil {
 
-    protected enum OperationType {
+    public enum OperationType {
         CREATE,ALTER,DROP
     }
 
-    public Sql[] generateSql(DbLinkState statement, Database database,
-                             SqlGeneratorChain sqlGeneratorChain) {
-        StringBuilder sql = new StringBuilder();
-        sql
-           .append(addIfNotNull(String.format(" USING '%s'", statement.getUsing()), !isEmpty(statement.getUsing())));
-
-        return new Sql[]{new UnparsedSql(sql.toString())};
-    }
-
-    protected String makeCommonParts(DbLinkState statement, OperationType type) {
+    public static String makeCommonParts(DbLinkState statement, OperationType type) {
         StringBuilder sb = new StringBuilder();
         switch (type) {
             case CREATE:
@@ -41,7 +26,7 @@ public abstract class DBLinkGenerator extends AbstractSqlGenerator<DbLinkState> 
            .append(statement.getDblinkName());
         return sb.toString();
     }
-    protected String makeConnectParts(DbLinkState statement) {
+    public static String makeConnectParts(DbLinkState statement) {
         StringBuilder sb = new StringBuilder();
         sb.append(" CONNECT TO ")
           .append(statement.getUser())
@@ -50,30 +35,25 @@ public abstract class DBLinkGenerator extends AbstractSqlGenerator<DbLinkState> 
 
         return sb.toString();
     }
-    protected String makeAuthParts(DbLinkState statement) {
+    public static String makeAuthParts(DbLinkState statement) {
         StringBuilder sb = new StringBuilder();
         sb.append(addIfNotNull(String.format(" AUTHENTICATED BY %s IDENTIFIED BY %s ", statement.getAuthUser(), statement.getAuthPassword())
                 , statement.isSharedType()));
         return sb.toString();
     }
 
-    protected String addIfNotNull(String data, boolean option) {
+    public static String addIfNotNull(String data, boolean option) {
         if(option && !isEmpty(data)) {
             return data;
         }
         return "";
     }
 
-    protected boolean isEmpty(String data) {
+    public static boolean isEmpty(String data) {
         return data == null || data.length() <= 0;
     }
 
-    public boolean supports(DbLinkState statement, Database database) {
-        return database instanceof OracleDatabase;
-    }
-
-    public ValidationErrors validate(DbLinkState statement,
-                                     Database database, SqlGeneratorChain sqlGeneratorChain) {
+    public static ValidationErrors makeValidate(DbLinkState statement, String additionalMsg) {
         ValidationErrors validationErrors = new ValidationErrors();
         validationErrors.checkRequiredField("dblinkName", statement.getDblinkName());
         validationErrors.checkRequiredField("user", statement.getUser());
@@ -82,8 +62,9 @@ public abstract class DBLinkGenerator extends AbstractSqlGenerator<DbLinkState> 
             validationErrors.checkRequiredField("authUser", statement.getAuthUser());
             validationErrors.checkRequiredField("authPassword", statement.getAuthPassword());
         }
+        String msg = isEmpty(additionalMsg) ? "type must be \"SHARED\" or \"PUBLIC\" or empty" : additionalMsg;
         if(!isEmpty(statement.getType()) && !statement.isSharedType() && !statement.isPublicType()) {
-            validationErrors.addError("type must be \"SHARED\" or \"PUBLIC\" or empty");
+            validationErrors.addError(msg);
         }
         return validationErrors;
     }

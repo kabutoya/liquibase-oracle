@@ -10,7 +10,7 @@
                           user="other" password="other" using="xe" />
     </changeSet>
     <changeSet id="2" author="kabu">
-        <ora:alterDBLink dblinkName="generate_pubulic_link"
+        <ora:alterDBLink type="PUBLIC" dblinkName="generate_pubulic_link"
                           user="other" password="other" using="xe" />
     </changeSet>
     <changeSet id="3" author="kabu">

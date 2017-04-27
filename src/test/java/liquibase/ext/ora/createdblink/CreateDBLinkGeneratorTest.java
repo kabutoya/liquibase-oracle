@@ -3,7 +3,6 @@ package liquibase.ext.ora.createdblink;
 import liquibase.database.Database;
 import liquibase.database.core.OracleDatabase;
 import liquibase.exception.ValidationErrors;
-import liquibase.ext.ora.dblink.DbLinkState;
 import liquibase.ext.ora.testing.BaseTestCase;
 import liquibase.sql.Sql;
 import liquibase.statement.SqlStatement;
@@ -12,11 +11,8 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-/**
- * Created by 01008716 on 2017/04/26.
- */
 public class CreateDBLinkGeneratorTest extends BaseTestCase {
     private CreateDBLinkChange change;
     private Database database = new OracleDatabase();
@@ -37,7 +33,7 @@ public class CreateDBLinkGeneratorTest extends BaseTestCase {
     @Test
     public void checkLocalDBLinkSQL() {
         SqlStatement[] statements = change.generateStatements(database);
-        DbLinkState statement = (DbLinkState)statements[0];
+        CreateDBLinkStatement statement = (CreateDBLinkStatement)statements[0];
         CreateDBLinkGenerator generator = new CreateDBLinkGenerator();
         Sql[] sqls = generator.generateSql(statement, database, null);
 
@@ -50,7 +46,7 @@ public class CreateDBLinkGeneratorTest extends BaseTestCase {
         change.setPassword(null);
         change.setUsing(null);  //USING allow NULL
         SqlStatement[] statements = change.generateStatements(database);
-        DbLinkState statement = (DbLinkState)statements[0];
+        CreateDBLinkStatement statement = (CreateDBLinkStatement)statements[0];
         CreateDBLinkGenerator generator = new CreateDBLinkGenerator();
 
         ValidationErrors errs = generator.validate(statement, database, null);
@@ -61,7 +57,7 @@ public class CreateDBLinkGeneratorTest extends BaseTestCase {
     public void checkPublicDBLinkSQL() {
         change.setType("PUBLIC");
         SqlStatement[] statements = change.generateStatements(database);
-        DbLinkState statement = (DbLinkState)statements[0];
+        CreateDBLinkStatement statement = (CreateDBLinkStatement)statements[0];
         CreateDBLinkGenerator generator = new CreateDBLinkGenerator();
         Sql[] sqls = generator.generateSql(statement, database, null);
 
@@ -75,7 +71,7 @@ public class CreateDBLinkGeneratorTest extends BaseTestCase {
         change.setAuthUser("AUSER1");
         change.setAuthPassword("APWD1");
         SqlStatement[] statements = change.generateStatements(database);
-        DbLinkState statement = (DbLinkState)statements[0];
+        CreateDBLinkStatement statement = (CreateDBLinkStatement)statements[0];
         CreateDBLinkGenerator generator = new CreateDBLinkGenerator();
         Sql[] sqls = generator.generateSql(statement, database, null);
 
@@ -87,9 +83,8 @@ public class CreateDBLinkGeneratorTest extends BaseTestCase {
         change.setAuthUser(null);
         change.setAuthPassword(null);
         SqlStatement[] statements = change.generateStatements(database);
-        DbLinkState statement = (DbLinkState)statements[0];
+        CreateDBLinkStatement statement = (CreateDBLinkStatement)statements[0];
         CreateDBLinkGenerator generator = new CreateDBLinkGenerator();
-        Sql[] sqls = generator.generateSql(statement, database, null);
 
         ValidationErrors errs = generator.validate(statement, database, null);
         List<String> msgs = errs.getRequiredErrorMessages();
@@ -99,9 +94,8 @@ public class CreateDBLinkGeneratorTest extends BaseTestCase {
     public void checkSharedDBLinkSQLNonSupportedTypeERR() {
         change.setType("HOGE");
         SqlStatement[] statements = change.generateStatements(database);
-        DbLinkState statement = (DbLinkState)statements[0];
+        CreateDBLinkStatement statement = (CreateDBLinkStatement)statements[0];
         CreateDBLinkGenerator generator = new CreateDBLinkGenerator();
-        Sql[] sqls = generator.generateSql(statement, database, null);
 
         ValidationErrors errs = generator.validate(statement, database, null);
         List<String> msgs = errs.getErrorMessages();

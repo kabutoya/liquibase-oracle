@@ -9,9 +9,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-/**
- * Created by 01008716 on 2017/04/26.
- */
 public class DropDBLinkChangeTest extends BaseTestCase {
     @Before
     public void setUp() throws Exception {

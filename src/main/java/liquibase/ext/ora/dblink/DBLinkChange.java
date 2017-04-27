@@ -1,15 +1,11 @@
 package liquibase.ext.ora.dblink;
 
-import liquibase.change.ChangeMetaData;
-import liquibase.change.DatabaseChange;
-import liquibase.database.Database;
 import liquibase.statement.SqlStatement;
 
 
 public abstract class DBLinkChange extends DbLinkAttribute {
 
-    public SqlStatement[] generateStatements(Database database) {
-        DbLinkState statement = new DbLinkState();
+    protected <T extends DbLinkState>SqlStatement[] constnstructStatment(T statement) {
         statement.setType(getType());
         statement.setDblinkName(getDblinkName());
         statement.setUser(getUser());

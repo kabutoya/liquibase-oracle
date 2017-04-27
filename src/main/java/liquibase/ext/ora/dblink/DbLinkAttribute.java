@@ -38,9 +38,7 @@ public abstract class DbLinkAttribute extends AbstractChange {
         this.user = user;
     }
 
-    public String getPassword() {
-        return password;
-    }
+    public String getPassword() {return password;}
 
     public void setPassword(String password) {
         this.password = password;
