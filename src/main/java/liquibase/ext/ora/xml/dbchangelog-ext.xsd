@@ -68,6 +68,24 @@
         </xsd:complexType>
     </xsd:element>
 
+    <!--    AlterTablespace by kabutoya -->
+    <xsd:element name="alterTablespace">
+        <xsd:complexType>
+            <xsd:attribute name="type" type="xsd:string" use="required"/>
+            <xsd:attribute name="tablespaceName" type="xsd:string" use="required"/>
+            <xsd:attribute name="objectName" type="xsd:string" use="required"/>
+            <xsd:attribute name="objectSchemaName" type="xsd:string"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!--    AlterTablespace by kabutoya -->
+    <xsd:element name="trigger">
+        <xsd:complexType>
+            <xsd:attribute name="schemaName" type="xsd:string" />
+            <xsd:attribute name="triggerName" type="xsd:string" use="required"/>
+            <xsd:attribute name="triggerSql" type="xsd:string" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
     <!--    AddCheck Constraint by Tomek -->
 
     <xsd:element name="addCheck">

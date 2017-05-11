@@ -3,8 +3,9 @@ package liquibase.ext.ora.dblink;
 import liquibase.statement.AbstractSqlStatement;
 
 public class DbLinkState extends AbstractSqlStatement {
-    static final String TYPE_SHARED = "SHARED";
-    static final String TYPE_PUBLIC = "PUBLIC";
+    public static final String TYPE_SHARED = "SHARED";
+    public static final String TYPE_PUBLIC = "PUBLIC";
+    public static final String TYPE_PRIVATE = "PRIVATE";
 
     private String type;     // SHARED, PUBLIC
     private String dblinkName;
@@ -14,6 +15,9 @@ public class DbLinkState extends AbstractSqlStatement {
     private String authPassword;
     private String using;
 
+    public boolean isPrivateType () {
+        return TYPE_PRIVATE.equalsIgnoreCase(this.type);
+    }
     public boolean isSharedType () {
         return TYPE_SHARED.equalsIgnoreCase(this.type);
     }

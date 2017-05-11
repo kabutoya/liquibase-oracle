@@ -27,6 +27,7 @@ public class DBLinkGeneratorUtil {
         return sb.toString();
     }
     public static String makeConnectParts(DbLinkState statement) {
+        if(isEmpty(statement.getUser())) return "";
         StringBuilder sb = new StringBuilder();
         sb.append(" CONNECT TO ")
           .append(statement.getUser())
@@ -36,6 +37,8 @@ public class DBLinkGeneratorUtil {
         return sb.toString();
     }
     public static String makeAuthParts(DbLinkState statement) {
+        // dblink authenticationはSHAREDでなければ設定できない。
+        if(!statement.isSharedType()) return "";
         StringBuilder sb = new StringBuilder();
         sb.append(addIfNotNull(String.format(" AUTHENTICATED BY %s IDENTIFIED BY %s ", statement.getAuthUser(), statement.getAuthPassword())
                 , statement.isSharedType()));
@@ -56,14 +59,17 @@ public class DBLinkGeneratorUtil {
     public static ValidationErrors makeValidate(DbLinkState statement, String additionalMsg) {
         ValidationErrors validationErrors = new ValidationErrors();
         validationErrors.checkRequiredField("dblinkName", statement.getDblinkName());
-        validationErrors.checkRequiredField("user", statement.getUser());
-        validationErrors.checkRequiredField("password", statement.getPassword());
         if(statement.isSharedType()) {
+            //SHAREDのDBLinkではauthenticationが必須。
             validationErrors.checkRequiredField("authUser", statement.getAuthUser());
             validationErrors.checkRequiredField("authPassword", statement.getAuthPassword());
+        } else {
+            //それ以外のDBLinkはCONNECTが必須。
+            validationErrors.checkRequiredField("user", statement.getUser());
+            validationErrors.checkRequiredField("password", statement.getPassword());
         }
         String msg = isEmpty(additionalMsg) ? "type must be \"SHARED\" or \"PUBLIC\" or empty" : additionalMsg;
-        if(!isEmpty(statement.getType()) && !statement.isSharedType() && !statement.isPublicType()) {
+        if(!isEmpty(statement.getType()) && !statement.isSharedType() && !statement.isPublicType() && !statement.isPrivateType()) {
             validationErrors.addError(msg);
         }
         return validationErrors;
