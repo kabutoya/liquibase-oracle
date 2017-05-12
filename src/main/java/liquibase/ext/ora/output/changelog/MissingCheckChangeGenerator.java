@@ -8,8 +8,7 @@ import liquibase.diff.output.changelog.ChangeGeneratorChain;
 import liquibase.diff.output.changelog.MissingObjectChangeGenerator;
 import liquibase.ext.ora.addcheck.AddCheckChange;
 import liquibase.ext.ora.structure.Check;
-import liquibase.ext.ora.structure.DBLink;
-import liquibase.ext.ora.structure.MaterializedView;
+import liquibase.ext.ora.structure.MView;
 import liquibase.ext.ora.structure.Tablespace;
 import liquibase.structure.DatabaseObject;
 import liquibase.structure.core.Index;
@@ -27,7 +26,7 @@ public class MissingCheckChangeGenerator extends AbstractChangeGenerator impleme
 
     @Override
     public Class<? extends DatabaseObject>[] runAfterTypes()  {
-        return new Class[] {Table.class, View.class, Index.class, MaterializedView.class};
+        return new Class[] {Table.class, View.class, Index.class, MView.class};
     }
     @Override
     public Class<? extends DatabaseObject>[] runBeforeTypes() {

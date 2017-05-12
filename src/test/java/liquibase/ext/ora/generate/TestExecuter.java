@@ -35,8 +35,8 @@ public class TestExecuter implements Executor {
         selector = selector.split("(select|SELECT)")[1];
         List<String> list = new ArrayList<String>();
         for(String data : selector.split(",")) {
-            String target = data.split("(as|AS)")[1];
-            list.add(target.replaceAll("\\s", ""));
+            String[] target = data.split("(as|AS)");
+            if(target.length > 1) list.add(target[1].replaceAll("\\s", ""));
         }
         return list;
     }

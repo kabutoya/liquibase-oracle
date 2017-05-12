@@ -68,6 +68,27 @@
         </xsd:complexType>
     </xsd:element>
 
+    <!--    CreateMview by kabutoya -->
+    <xsd:element name="createMView">
+        <xsd:complexType>
+            <xsd:attribute name="schemaName" type="xsd:string"/>
+            <xsd:attribute name="viewName" type="xsd:string" use="required"/>
+            <xsd:attribute name="refreshMode" type="xsd:string"/>
+            <xsd:attribute name="refreshMethod" type="xsd:string"/>
+            <xsd:attribute name="with" type="xsd:string"/>
+            <xsd:attribute name="query" type="xsd:string" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="createMViewLog">
+        <xsd:complexType>
+            <xsd:attribute name="schemaName" type="xsd:string"/>
+            <xsd:attribute name="viewName" type="xsd:string" use="required"/>
+            <xsd:attribute name="hasRowId" type="xsd:string"/>
+            <xsd:attribute name="hasPK" type="xsd:string"/>
+            <xsd:attribute name="hasSequence" type="xsd:string"/>
+        </xsd:complexType>
+    </xsd:element>
+
     <!--    AlterTablespace by kabutoya -->
     <xsd:element name="alterTablespace">
         <xsd:complexType>

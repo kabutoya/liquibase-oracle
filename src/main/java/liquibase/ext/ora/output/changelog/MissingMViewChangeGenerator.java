@@ -6,19 +6,19 @@ import liquibase.diff.output.DiffOutputControl;
 import liquibase.diff.output.changelog.AbstractChangeGenerator;
 import liquibase.diff.output.changelog.ChangeGeneratorChain;
 import liquibase.diff.output.changelog.MissingObjectChangeGenerator;
+import liquibase.ext.ora.createmview.CreateMViewChange;
 import liquibase.ext.ora.structure.MView;
 import liquibase.ext.ora.structure.Tablespace;
 import liquibase.ext.ora.structure.Trigger;
-import liquibase.ext.ora.trriger.TriggerChange;
 import liquibase.structure.DatabaseObject;
 import liquibase.structure.core.Index;
 import liquibase.structure.core.Table;
 import liquibase.structure.core.View;
 
-public class MissingTriggerChangeGenerator extends AbstractChangeGenerator implements MissingObjectChangeGenerator {
+public class MissingMViewChangeGenerator extends AbstractChangeGenerator implements MissingObjectChangeGenerator {
     @Override
     public int getPriority(Class<? extends DatabaseObject> objectType, Database database) {
-        if (Trigger.class.isAssignableFrom(objectType)) {
+        if (MView.class.isAssignableFrom(objectType)) {
             return PRIORITY_DEFAULT;
         }
         return PRIORITY_NONE;
@@ -26,7 +26,7 @@ public class MissingTriggerChangeGenerator extends AbstractChangeGenerator imple
 
     @Override
     public Class<? extends DatabaseObject>[] runAfterTypes()  {
-        return new Class[] {Table.class, View.class, Index.class, MView.class};
+        return new Class[] {Table.class, View.class, Index.class};
     }
     @Override
     public Class<? extends DatabaseObject>[] runBeforeTypes() {
@@ -35,13 +35,15 @@ public class MissingTriggerChangeGenerator extends AbstractChangeGenerator imple
 
     @Override
     public Change[] fixMissing(DatabaseObject missingObject, DiffOutputControl control, Database referenceDatabase, final Database comparisonDatabase, ChangeGeneratorChain chain) {
-        Trigger trigger = (Trigger) missingObject;
+        MView mview = (MView) missingObject;
 
-        TriggerChange change = new TriggerChange();
-        change.setSchemaName(trigger.getSchema().getName());
-        change.setTriggerName(trigger.getName());
-        change.setTriggerSql(trigger.getTriggerSql());
-
+        CreateMViewChange change = new CreateMViewChange();
+        change.setSchemaName(mview.getSchema().getName());
+        change.setViewName(mview.getName());
+        change.setRefreshMethod(mview.getRefreshMethod());
+        change.setRefreshMode(mview.getMode());
+        change.setWith(mview.getWith());
+        change.setQuery(mview.getQuery());
         return new Change[] { change };
     }
 

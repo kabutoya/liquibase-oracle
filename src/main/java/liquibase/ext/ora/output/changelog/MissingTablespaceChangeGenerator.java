@@ -7,7 +7,7 @@ import liquibase.diff.output.changelog.AbstractChangeGenerator;
 import liquibase.diff.output.changelog.ChangeGeneratorChain;
 import liquibase.diff.output.changelog.MissingObjectChangeGenerator;
 import liquibase.ext.ora.altertablespace.AlterTablespaceChange;
-import liquibase.ext.ora.structure.MaterializedView;
+import liquibase.ext.ora.structure.MView;
 import liquibase.ext.ora.structure.Tablespace;
 import liquibase.structure.DatabaseObject;
 import liquibase.structure.core.Index;
@@ -24,7 +24,7 @@ public class MissingTablespaceChangeGenerator extends AbstractChangeGenerator im
 
     @Override
     public Class<? extends DatabaseObject>[] runAfterTypes()  {
-        return new Class[] {Table.class, Index.class, MaterializedView.class};
+        return new Class[] {Table.class, Index.class, MView.class};
     }
 
     @Override

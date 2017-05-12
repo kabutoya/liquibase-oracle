@@ -6,13 +6,10 @@ import liquibase.diff.output.DiffOutputControl;
 import liquibase.diff.output.changelog.AbstractChangeGenerator;
 import liquibase.diff.output.changelog.ChangeGeneratorChain;
 import liquibase.diff.output.changelog.UnexpectedObjectChangeGenerator;
-import liquibase.ext.ora.createdblink.CreateDBLinkChange;
 import liquibase.ext.ora.dropdblink.DropDBLinkChange;
-import liquibase.ext.ora.droptrigger.DropTriggerChange;
 import liquibase.ext.ora.structure.DBLink;
-import liquibase.ext.ora.structure.MaterializedView;
+import liquibase.ext.ora.structure.MView;
 import liquibase.ext.ora.structure.Tablespace;
-import liquibase.ext.ora.structure.Trigger;
 import liquibase.structure.DatabaseObject;
 import liquibase.structure.core.Index;
 import liquibase.structure.core.Table;
@@ -29,7 +26,7 @@ public class UnexpectedDBLinkChangeGenerator extends AbstractChangeGenerator imp
 
     @Override
     public Class<? extends DatabaseObject>[] runAfterTypes()  {
-        return new Class[] {Table.class, View.class, Index.class, MaterializedView.class};
+        return new Class[] {Table.class, View.class, Index.class, MView.class};
     }
     @Override
     public Class<? extends DatabaseObject>[] runBeforeTypes() {
